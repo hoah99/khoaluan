@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Modules\MonThi\Controllers;
+namespace App\Modules\CauHoi\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DataTables;
 
+use App\Modules\CauHoi\Models\CauHoi;
 use App\Modules\MonThi\Models\MonThi;
 
-class MonThiController extends Controller
+class CauHoiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,23 +18,26 @@ class MonThiController extends Controller
      */
     public function index(Request $request)
     {
-        $monthi = MonThi::latest()->get();
+        $cauhoi = CauHoi::latest()->get();
         if ($request->ajax()) {
-            $data = MonThi::latest()->get();
+            $data = CauHoi::latest()->get();
+            foreach ($data as $key => $value) {
+                $data[$key]->tenmon = MonThi::where('id','=',$data[$key]->idmonthi)->first()->tenmon;
+           }     
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
    
-                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-info btn-sm editMonThi"><i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;Sửa</a>';
+                           $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-info btn-sm editCauHoi"><i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;Sửa</a>';
    
-                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteMonThi"><i class="fa fa-trash" aria-hidden="true"></i></i>&nbsp;Xóa</a>';
+                           $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteCauHoi"><i class="fa fa-trash" aria-hidden="true"></i></i>&nbsp;Xóa</a>';
     
                             return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
                 }
-                return view('MonThi::monthi',compact('monthi'));
+                return view('CauHoi::cauhoi',compact('cauhoi'));
     }
 
     /**
@@ -54,10 +58,20 @@ class MonThiController extends Controller
      */
     public function store(Request $request)
     {
-        MonThi::updateOrCreate(['id' => $request->id],
-            ['tenmon' => $request->tenmon]);        
+        CauHoi::updateOrCreate(['id' => $request->id],
+            [
+                'noidung' => $request->noidung,
+                'phuongana' => $request->phuongana,
+                'phuonganb' => $request->phuonganb,
+                'phuonganc' => $request->phuonganc,
+                'phuongand' => $request->phuongand,
+                'dapan' => $request->dapan,
+                'chuong' => $request->chuong,
+                'dokho' => $request->dokho,
+                'idmonthi' => $request->idmonthi
+            ]);        
         
-            return redirect()->route('monthi.index')->with('success', 'themthanhcong');
+            return redirect()->route('cauhoi.index')->with('themthanhcong', 'Thêm thành công');
     }
 
     /**
@@ -79,8 +93,8 @@ class MonThiController extends Controller
      */
     public function edit($id)
     {
-        $monthi = MonThi::find($id);
-        return response()->json($monthi);
+        $cauhoi = CauHoi::find($id);
+        return response()->json($cauhoi);
     }
 
     /**
@@ -103,7 +117,7 @@ class MonThiController extends Controller
      */
     public function destroy($id)
     {
-        MonThi::find($id)->delete();
+        CauHoi::find($id)->delete();
 
         return response()->json(['success'=>'Xóa thành công']);
     }
