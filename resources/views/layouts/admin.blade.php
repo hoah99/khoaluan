@@ -71,22 +71,22 @@ The above copyright notice and this permission notice shall be included in all c
               <p>Câu hỏi</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./icons.html">
+          <li class="nav-item @yield('nav_giangvien') ">
+            <a class="nav-link" href="{{ url('giangvien') }}">
               <i class="material-icons">bubble_chart</i>
-              <p>Icons</p>
+              <p>Giảng viên</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./map.html">
+          <li class="nav-item @yield('nav_lop') ">
+            <a class="nav-link" href="{{ url('lop') }}">
               <i class="material-icons">location_ons</i>
-              <p>Maps</p>
+              <p>Lớp</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./notifications.html">
+          <li class="nav-item @yield('nav_dethi') ">
+            <a class="nav-link" href="{{ url('dethi') }}">
               <i class="material-icons">notifications</i>
-              <p>Notifications</p>
+              <p>Đề thi</p>
             </a>
           </li>
           <li class="nav-item ">

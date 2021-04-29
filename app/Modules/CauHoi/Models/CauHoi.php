@@ -14,4 +14,8 @@ class CauHoi extends Model
     protected $fillable = [
         'noidung', 'phuongana', 'phuonganb', 'phuonganc', 'phuongand', 'dapan', 'chuong', 'dokho', 'idmonthi'
     ];
+
+    public function dethi(){
+        return $this->belongsTo('App\Modules\DeThi\Models\DeThi');
+    }
 }
