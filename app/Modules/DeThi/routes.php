@@ -16,4 +16,10 @@ use App\Modules\DeThi\Controllers\DeThiController;
 
 Route::resource('dethi', DeThiController::class);
 Route::post('laydschuong', 'DeThiController@laydschuong')->name('dethi.laydschuong');
+Route::post('socaucuachuong', 'DeThiController@socaucuachuong')->name('dethi.socaucuachuong');
+// Route::get('get_units', 'DeThiController@socaucuachuong')->name('dethi.socaucuachuong');
+
+
+
+
 

@@ -95,7 +95,7 @@
                      <div class="form-group">
                         <label for="name" class="col-sm-12 control-label" style="font-size: medium;">Môn thi:</label>
                         <div class="col-sm-12">
-                            <select class="form-control" id="idmonthi" name="idmonthi" onchange="getsocauhoi(this.value)" required="">
+                            <select class="form-control" id="idmonthi" name="idmonthi" onchange="get_units(this.value)" required="">
                               <option value="" disabled selected>--Chọn môn thi--</option>
                               @foreach($MonThi as $key => $monthi)
                               <option value="{{$monthi->id}}">{{$monthi->tenmon}}</option>
@@ -110,10 +110,10 @@
                     <div id="dschuong" name="dschuong"></div>
                         
                       <div class="form-group">
-                          <label for="name" class="col-sm-12 control-label" style="font-size: medium;">Tổng số câu hỏi: {{ $CauHoi->count() }}</label>
+                          <label for="name" class="col-sm-12 control-label" style="font-size: medium;">Tổng số câu hỏi:</label>
                           <br>
                           <div class="col-sm-12">
-                            <input type="number" class="form-control" id="socauhoi" name="socauhoi" required="">
+                            <input type="number" class="form-control" id="socauhoi" name="socauhoi" required="" readonly value="0">
                           </div>
                       </div>
 
@@ -295,27 +295,29 @@
           });
     
 
+          $('select').select();
+    function get_units(id) {
+        var list = $('#dschuong');
+        list.empty();
+        var url = "{{ route('dethi.socaucuachuong') }}"+'/'+ id;
+        var success = function (result) {
+            if (result.length <= 0) {
+                var item = '<div class="input-field"><input type="text" disabled value="Môn này hiện chưa có câu hỏi nào"></div>';
+                list.append(item);
+            } else {
+                for (i = 0; i < result.length; i++) {
+                    var item = '<div class="input-field"><label for="unit-' + result[i].chuong + '">Nhập số câu hỏi chương ' + result[i].chuong + ' (có ' + result[i].Total + ' câu) <span class="failed">(*)</span></label><input type="number" max="' + result[i].Total + '" class="unit_input" onchange="set_sum(' + result[i].Total + ')"  name="unit-' + result[i].chuong + '" id="unit-' + result[i].chuong + '" required></div>';
+                    list.append(item);
+                }
+            }
+        };
+        $.get(url, success);
+    }
+
      });
      
 
-    //  $('select').select();
-    // function get_units(id) {
-    //     var list = $('#dschuong');
-    //     list.empty();
-    //     var url = "{{ route('dethi.laydschuong') }}"+'/'+ id;
-    //     var success = function (result) {
-    //         if (result.length <= 0) {
-    //             var item = '<div class="input-field"><input type="text" disabled value="Môn này hiện chưa có câu hỏi nào"></div>';
-    //             list.append(item);
-    //         } else {
-    //             for (i = 0; i < result.length; i++) {
-    //                 var item = '<div class="input-field"><label for="unit-' + result[i].Unit + '">Nhập số câu hỏi chương ' + result[i].Unit + ' (có ' + result[i].Total + ' câu) <span class="failed">(*)</span></label><input type="number" max="' + result[i].Total + '" class="unit_input" onchange="set_sum(' + result[i].Total + ')"  name="unit-' + result[i].Unit + '" id="unit-' + result[i].Unit + '" required></div>';
-    //                 list.append(item);
-    //             }
-    //         }
-    //     };
-    //     $.get(url, success);
-    // }
+    
     // function set_sum(total) {
     //     var sum = 0;
     //     $('.unit_input').each(function () {

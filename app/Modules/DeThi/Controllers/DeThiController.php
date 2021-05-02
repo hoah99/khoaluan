@@ -138,11 +138,14 @@ class DeThiController extends Controller
         return response()->json(['success'=>'Xóa thành công']);
     }
 
-    public function socauhoi(Request $request){
-        // $sochuong = CauHoi::distinct()->count('chuong')->where('idmonthi', $request->idmonthi)->all();
-        // return response()->json($sochuong);
+    // public function laydschuong($id){
+    //     $sochuong = CauHoi::distinct()->count('chuong')->where('idmonthi', $id)->get();
+    //     return view('DeThi::dethi')->with('sochuong', $sochuong);
+    // }
 
-        $socauhoi = CauHoi::where('idmonthi','=', $request->idmonthi)->get();
-        return view('DeThi::dethi')->with('socauhoi', $socauhoi);
+    public function socaucuachuong($id){
+        $socaucuachuong = CauHoi::groupBy('chuong')->select('chuong', CauHoi::raw('count(id) as Total'))->where('idmonthi','=', $id)->get()->toArray();
+        return view('DeThi::dethi')->with('socaucuachuong', $socaucuachuong);
     }
+
 }
