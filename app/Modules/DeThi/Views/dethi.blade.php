@@ -72,7 +72,7 @@
                   <h4 class="modal-title" id="modelHeading"></h4>
               </div>
               <div class="modal-body">
-                  <form id="cauhoiForm" name="cauhoiForm" class="form-horizontal">
+                  <form id="dethiForm" name="dethiForm" class="form-horizontal">
                     {{ csrf_field() }}
                      <input type="hidden" name="id" id="id">
 
@@ -103,9 +103,6 @@
                             </select>
                         </div>
                     </div>
-                    @php
-                        $CauHoi = CauHoi::where('idmonthi','=','29');
-                    @endphp
 
                     <div id="dschuong" name="dschuong"></div>
                         
@@ -118,7 +115,7 @@
                       </div>
 
                       <div class="form-group">
-                        <label for="name" class="col-sm-12 control-label" style="font-size: medium;">Thời gian (phút):</label>
+                        <label for="name" class="col-sm-12 control-label" style="font-size: medium;" min="0">Thời gian (phút):</label>
                         <br>
                         <div class="col-sm-12">
                             <input type="number" class="form-control" id="thoigian" name="thoigian" placeholder="Nhập thời gian" value="" required="">
@@ -295,18 +292,24 @@
           });
     
 
-          $('select').select();
-    function get_units(id) {
+          
+
+     });
+     
+     $('select').select();
+    function get_units() {
+        var id = $('#idmonthi').val();
         var list = $('#dschuong');
         list.empty();
-        var url = "{{ route('dethi.socaucuachuong') }}"+'/'+ id;
+        var url = "{{ route('dethi.socaucuachuong', ':id') }}";
+        url = url.replace(':id', id);
         var success = function (result) {
             if (result.length <= 0) {
-                var item = '<div class="input-field"><input type="text" disabled value="Môn này hiện chưa có câu hỏi nào"></div>';
+                var item = '<div class="form-group"><div class="col-sm-12"><input type="text" disabled value="Môn này hiện chưa có câu hỏi nào" class="form-control" style="color: #26c6da;"></div></div>';
                 list.append(item);
             } else {
                 for (i = 0; i < result.length; i++) {
-                    var item = '<div class="input-field"><label for="unit-' + result[i].chuong + '">Nhập số câu hỏi chương ' + result[i].chuong + ' (có ' + result[i].Total + ' câu) <span class="failed">(*)</span></label><input type="number" max="' + result[i].Total + '" class="unit_input" onchange="set_sum(' + result[i].Total + ')"  name="unit-' + result[i].chuong + '" id="unit-' + result[i].chuong + '" required></div>';
+                    var item = '<div class="form-group"><label for="unit-' + result[i].chuong + '" class="col-sm-12 control-label" style="font-size: medium;">Nhập số câu hỏi chương ' + result[i].chuong + ' (có ' + result[i].Total + ' câu) <span class="failed">(*)</span></label><div class="col-sm-12"><br><input type="number" min="0" max="' + result[i].Total + '" class="unit_input form-control" onchange="set_sum(' + result[i].Total + ')"  name="unit-' + result[i].chuong + '" id="unit-' + result[i].chuong + '" required></div></div>';
                     list.append(item);
                 }
             }
@@ -314,22 +317,20 @@
         $.get(url, success);
     }
 
-     });
-     
-
-    
-    // function set_sum(total) {
-    //     var sum = 0;
-    //     $('.unit_input').each(function () {
-    //         if (parseInt(this.value) > parseInt(this.getAttribute("max")))
-    //             alert("Nhập quá số câu hỏi đang có, vui lòng kiểm tra lại");
-    //         else if (this.value != "")
-    //             sum += parseInt(this.value);
-    //     });
-    //     $('#total_question').val(sum);
-    // }
-
-    
-
+    function set_sum(total) {
+        var sum = 0;
+        $('.unit_input').each(function () {
+            if (parseInt(this.value) > parseInt(this.getAttribute("max")))
+            {
+                alert("Nhập quá số câu hỏi đang có, vui lòng kiểm tra lại");
+            }
+            else 
+            {
+                if (this.value != "")
+                sum += parseInt(this.value);
+            }
+        });
+        $('#socauhoi').val(sum);
+    }
 </script>
 @endsection

@@ -14,10 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 use App\Modules\DeThi\Controllers\DeThiController;
 
+Route::get('dethi/socau/{id}', 'App\Modules\DeThi\Controllers\DeThiController@socaucuachuong')->name('dethi.socaucuachuong');
+
 Route::resource('dethi', DeThiController::class);
-Route::post('laydschuong', 'DeThiController@laydschuong')->name('dethi.laydschuong');
-Route::post('socaucuachuong', 'DeThiController@socaucuachuong')->name('dethi.socaucuachuong');
-// Route::get('get_units', 'DeThiController@socaucuachuong')->name('dethi.socaucuachuong');
 
 
 

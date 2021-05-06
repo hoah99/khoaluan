@@ -74,17 +74,17 @@ class DeThiController extends Controller
                 'idgiangvien' => $request->idgiangvien,
                 'idlop' => $request->idlop
             ]);
-
-
-
-            $cauhoi = CauHoi::all()->random($request->socauhoi)->array();
             
-            foreach($cauhoi as $ch){
-            $cauhoi_dethi = new CauHoiDeThi();
-            $cauhoi_dethi->iddethi = $request->id;
-            $cauhoi_dethi->idcauhoi = $cauhoi;
-            $cauhoi_dethi->save();
-            }
+            // foreach($request->dschuong as $dsc)
+            // {
+            //     $cauhoi = CauHoi::where('idmonthi', $request->idmonthi)
+            //             ->where('chuong', $dsc)
+            //             ->inRandomOrder()->limit($request->unit)
+            //             ->get();
+            //     $cauhoidethi = new CauHoiDeThi();
+            //     $cauhoidethi->idmonthi -> $request->idmonthi;
+            //     $cauhoidethi->idcauhoi -> $cauhoi;
+            // }
             
         
             return redirect()->route('dethi.index')->with('themthanhcong', 'Thêm thành công');
@@ -143,9 +143,9 @@ class DeThiController extends Controller
     //     return view('DeThi::dethi')->with('sochuong', $sochuong);
     // }
 
-    public function socaucuachuong($id){
-        $socaucuachuong = CauHoi::groupBy('chuong')->select('chuong', CauHoi::raw('count(id) as Total'))->where('idmonthi','=', $id)->get()->toArray();
-        return view('DeThi::dethi')->with('socaucuachuong', $socaucuachuong);
+    public function socaucuachuong($id)
+    {
+        $socau = CauHoi::groupBy('chuong')->select('chuong', CauHoi::raw('count(id) as Total'))->where('idmonthi','=', $id)->get()->toArray();
+        return $socau;
     }
-
 }
